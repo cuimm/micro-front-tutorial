@@ -24,10 +24,9 @@ if (!window.__POWERED_BY_QIANKUN__) {
   __webpack_public_path__ = window.__INJECTED_PUBLIC_PATH_BY_QIANKUN__;
 }
 
-/*
-* 微应用需要在自己的入口 js (通常就是你配置的 webpack 的 entry js) 导出 bootstrap、mount、unmount 三个生命周期钩子，以供主应用在适当的时机调用。
-* */
 /**
+ * 微应用需要在自己的入口 js (通常就是你配置的 webpack 的 entry js) 导出 bootstrap、mount、unmount 三个生命周期钩子，以供主应用在适当的时机调用
+ *
  * bootstrap 只会在微应用初始化的时候调用一次，下次微应用重新进入时会直接调用 mount 钩子，不会再重复触发 bootstrap。
  * 通常我们可以在这里做一些全局变量的初始化，比如不会在 unmount 阶段被销毁的应用级别的缓存等。
  */
