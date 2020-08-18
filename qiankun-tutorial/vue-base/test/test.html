@@ -1,0 +1,32 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<div id="container">
+  <p>hello</p>
+  <div id="shadow">
+    shadow 影子节点
+  </div>
+</div>
+<script>
+  const container = document.getElementById('shadow')
+  let shadow = container.attachShadow({mode: 'open'}) // // 创建一个shadow root
+  console.log(shadow);
+  const textEl = document.createElement('p')
+  textEl.innerHTML = 'hello'
+  const style = document.createElement('style')
+  style.textContent = `
+    p {
+      color: red;
+    }
+  `
+  shadow.appendChild(textEl)
+  shadow.appendChild(style) // shadow dom内的样式不会影响到外部dom
+</script>
+</body>
+</html>
