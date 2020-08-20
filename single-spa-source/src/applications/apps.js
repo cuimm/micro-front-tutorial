@@ -5,7 +5,7 @@ import {
   LOADING_SOURCE_CODE, MOUNTING,
   NOT_BOOTSTRAPPED,
   NOT_LOADED, NOT_MOUNTED,
-  SKIP_BECAUSE_BROKEN,
+  SKIP_BECAUSE_BROKEN, MOUNTED,
 } from './app.helper';
 
 /* 用来存放所有的应用 */
@@ -22,6 +22,9 @@ export function getAppChanges() {
 
   apps.forEach(app => {
     const appShouldBeActive = app.status !== SKIP_BECAUSE_BROKEN && shouldBeActive(app);
+
+    console.log('getAppChanges', app.name, app.status, appShouldBeActive);
+
     switch (app.status) {
       case NOT_LOADED:
       case LOADING_SOURCE_CODE:
@@ -36,7 +39,7 @@ export function getAppChanges() {
           appsToMount.push(app);
         }
         break;
-      case MOUNTING:
+      case MOUNTED:
         if (!appShouldBeActive) {
           appsToUnmount.push(app);
         }

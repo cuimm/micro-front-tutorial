@@ -9,8 +9,17 @@
 <body>
 <a href="/#app1">app1</a>
 <a href="/#app2">app2</a>
+
+<a onclick="a()">应用1</a>
+<a onclick="b()">应用2</a>
 <script src="/lib/umd/single-spa.js"></script>
 <script>
+  function a(){
+    history.pushState({},'','/app1')
+  }
+  function b(){
+    history.pushState({},'','/app2')
+  }
   singleSpa.registerApplication(
       'app1',
       async () => {
@@ -23,17 +32,48 @@
           //   },
           // ],
           bootstrap: async () => {
-            console.log('bootstrap');
+            console.log('app1 bootstrap');
           },
           mount: async () => {
-            console.log('mount');
+            console.log('app1 mount');
           },
           unmount: async () => {
-            console.log('unmount');
+            console.log('app1 unmount');
           },
         }
       },
-      location => location.hash.startsWith('#app1'),
+      location => location.pathname.startsWith('/app1'),
+      // location => location.hash.startsWith('#app1'),
+      {
+        store: {
+          name: 'cuimm'
+        },
+      }
+  );
+  singleSpa.registerApplication(
+      'app2',
+      async () => {
+        return {
+          // bootstrap: [
+          //   async () => {
+          //     console.log('bootstrap');
+          //   },
+          //   async () => {
+          //   },
+          // ],
+          bootstrap: async () => {
+            console.log('app2 bootstrap');
+          },
+          mount: async () => {
+            console.log('app2 mount');
+          },
+          unmount: async () => {
+            console.log('app2 unmount');
+          },
+        }
+      },
+      location => location.pathname.startsWith('/app2'),
+      // location => location.hash.startsWith('#app2'),
       {
         store: {
           name: 'cuimm'

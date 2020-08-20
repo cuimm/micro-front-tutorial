@@ -4,7 +4,7 @@ import {toLoadPromise} from '../lifecycles/load';
 import {toUnmountPromise} from '../lifecycles/unmount';
 import {toBootstrapPromise} from '../lifecycles/bootstrap';
 import {toMountPromise} from '../lifecycles/mount';
-
+import './navigation-event';
 /**
  * 应用加载是异步的
  * 需要获取要加载的应用
@@ -12,7 +12,9 @@ import {toMountPromise} from '../lifecycles/mount';
  * 需要获取要挂载的应用
  */
 export function reroute() {
+  // 获取应用状态机
   const {appsToLoad, appsToMount, appsToUnmount} = getAppChanges();
+
   if (started) {
     return performAppChanges();
   } else {

@@ -111,6 +111,72 @@
     return app;
   }
 
+  const isInBrowser = typeof window !== 'undefined';
+
+  /* 路由拦截 */
+
+  const capturedEventListeners = {
+    hashchange: [],
+    popstate: [],
+  };
+
+  const routingEventsListeningTo = ['hashchange', 'popstate'];
+
+  function urlReroute() {
+    reroute();
+  }
+
+  // history模式路由：h5 api
+  function patchedUpdateState(updateState, methodName) {
+    return function () {
+      const urlBefore = window.location.href; // 路由切换前url地址
+      const result = updateState.apply(this, arguments);  // 切换history路由
+      const urlAfter = window.location.href;  // 路由切换后url地址
+
+      // 路由有变化 => 加载应用程序
+      if (urlBefore !== urlAfter) {
+        urlReroute(new PopStateEvent('popstate'));
+      }
+      return result;
+    }
+  }
+
+  if (isInBrowser) {
+    // 保存原始addEventListener && addEventListener
+    const originalAddEventListener = window.addEventListener;
+    const originalRemoveEventListener = window.addEventListener;
+
+    // 重写addEventListener
+    window.addEventListener = function (eventName, fn) {
+      if (typeof fn === 'function') {
+        if (routingEventsListeningTo.indexOf(eventName) && !capturedEventListeners[eventName].some(listener => listener === fn)) {
+          capturedEventListeners[eventName].push(fn);
+          return;
+        }
+      }
+      return originalAddEventListener.apply(this, arguments);
+    };
+    // 重写 removeEventListener
+    window.removeEventListener = function (eventName, fn) {
+      if (typeof fn === 'function') {
+        if (routingEventsListeningTo.indexOf(eventName)) {
+          capturedEventListeners[eventName] = capturedEventListeners[eventName].filter(listener => listener !== fn);
+        }
+      }
+      return originalRemoveEventListener.apply(this, arguments);
+    };
+
+    // hash路由切换时, 会触发hashchange事件
+    window.addEventListener('hashchange', urlReroute);
+
+    // popstate只有在作出浏览动作, 如：用户点击，或者执行history.back()或history.forward()方法 时才会触发（pushState和replaceState不会触发popstate）
+    window.addEventListener('popstate', urlReroute);
+
+    // history路由切换 pushState && replaceState => pushState和replaceState不会触发popstate事件（popstate只有在作出浏览动作, 如：用户点击，或者执行history.back()或history.forward()方法 时才会触发）
+    window.history.pushState = patchedUpdateState(window.history.pushState);
+    window.history.replaceState = patchedUpdateState(window.history.replaceState);
+  }
+
   /**
    * 应用加载是异步的
    * 需要获取要加载的应用
@@ -118,7 +184,9 @@
    * 需要获取要挂载的应用
    */
   function reroute() {
+    // 获取应用状态机
     const {appsToLoad, appsToMount, appsToUnmount} = getAppChanges();
+
     if (started) {
       return performAppChanges();
     } else {
@@ -166,6 +234,9 @@
 
     apps.forEach(app => {
       const appShouldBeActive = app.status !== SKIP_BECAUSE_BROKEN && shouldBeActive(app);
+
+      console.log('getAppChanges', app.name, app.status, appShouldBeActive);
+
       switch (app.status) {
         case NOT_LOADED:
         case LOADING_SOURCE_CODE:
@@ -180,7 +251,7 @@
             appsToMount.push(app);
           }
           break;
-        case MOUNTING:
+        case MOUNTED:
           if (!appShouldBeActive) {
             appsToUnmount.push(app);
           }
