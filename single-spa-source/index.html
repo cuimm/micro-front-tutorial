@@ -1,0 +1,46 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<a href="/#app1">app1</a>
+<a href="/#app2">app2</a>
+<script src="/lib/umd/single-spa.js"></script>
+<script>
+  singleSpa.registerApplication(
+      'app1',
+      async () => {
+        return {
+          // bootstrap: [
+          //   async () => {
+          //     console.log('bootstrap');
+          //   },
+          //   async () => {
+          //   },
+          // ],
+          bootstrap: async () => {
+            console.log('bootstrap');
+          },
+          mount: async () => {
+            console.log('mount');
+          },
+          unmount: async () => {
+            console.log('unmount');
+          },
+        }
+      },
+      location => location.hash.startsWith('#app1'),
+      {
+        store: {
+          name: 'cuimm'
+        },
+      }
+  );
+  singleSpa.start();
+</script>
+</body>
+</html>
