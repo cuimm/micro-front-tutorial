@@ -154,7 +154,7 @@
           return;
         }
       }
-      return originalAddEventListener.apply(this, arguments);
+      return originalAddEventListener.apply(this, arguments); // 执行原生addEventListener
     };
     // 重写 removeEventListener
     window.removeEventListener = function (eventName, fn) {
@@ -163,7 +163,7 @@
           capturedEventListeners[eventName] = capturedEventListeners[eventName].filter(listener => listener !== fn);
         }
       }
-      return originalRemoveEventListener.apply(this, arguments);
+      return originalRemoveEventListener.apply(this, arguments); // 执行原生的removeEventListener
     };
 
     // hash路由切换时, 会触发hashchange事件
