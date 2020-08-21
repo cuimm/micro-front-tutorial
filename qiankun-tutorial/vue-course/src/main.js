@@ -44,6 +44,8 @@ export async function mount(props) {
 export async function unmount() {
   console.log('course app unmount');
   vm.$destroy()
+  vm.$el.innerHTML = null
+  vm = null
 }
 
 // 可选生命周期钩子，仅使用 loadMicroApp 方式加载微应用时生效
