@@ -1,4 +1,5 @@
 const path = require('path')
+const packageName = require('./package.json').name;
 
 module.exports = {
   // publicPath: '//test.weibo.com:20000',
@@ -6,6 +7,7 @@ module.exports = {
     output: {
       library: 'course',
       libraryTarget: 'umd',
+      jsonpFunction: `webpackJsonp_${packageName}`
     },
   },
   devServer: {
