@@ -53,13 +53,14 @@ if (isInBrowser) {
     return originalRemoveEventListener.apply(this, arguments); // 执行原生的removeEventListener
   };
 
-  // hash路由切换时, 会触发hashchange事件
+  // hash路由-----hash路由切换时, 会触发hashchange事件
   window.addEventListener('hashchange', urlReroute);
 
-  // popstate只有在作出浏览动作, 如：用户点击，或者执行history.back()或history.forward()方法 时才会触发（pushState和replaceState不会触发popstate）
+
+  // history路由-----popstate只有在作出浏览动作, 如：用户点击，或者执行history.back()或history.forward()方法 时才会触发（pushState和replaceState不会触发popstate）
   window.addEventListener('popstate', urlReroute);
 
-  // history路由切换 pushState && replaceState => pushState和replaceState不会触发popstate事件（popstate只有在作出浏览动作, 如：用户点击，或者执行history.back()或history.forward()方法 时才会触发）
+  // history路由-----切换 pushState && replaceState => pushState和replaceState不会触发popstate事件（popstate只有在作出浏览动作, 如：用户点击，或者执行history.back()或history.forward()方法 时才会触发）
   window.history.pushState = patchedUpdateState(window.history.pushState, 'pushState');
   window.history.replaceState = patchedUpdateState(window.history.replaceState, 'replaceState');
 }
