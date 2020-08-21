@@ -48,6 +48,7 @@ if (isInBrowser) {
     if (typeof fn === 'function') {
       if (routingEventsListeningTo.indexOf(eventName)) {
         capturedEventListeners[eventName] = capturedEventListeners[eventName].filter(listener => listener !== fn);
+        return;
       }
     }
     return originalRemoveEventListener.apply(this, arguments); // 执行原生的removeEventListener
