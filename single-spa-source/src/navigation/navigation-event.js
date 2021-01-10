@@ -58,10 +58,10 @@ if (isInBrowser) {
   window.addEventListener('hashchange', urlReroute);
 
 
-  // history路由-----popstate只有在作出浏览动作, 如：用户点击，或者执行history.back()或history.forward()方法 时才会触发（pushState和replaceState不会触发popstate）
+  // history路由-----popstate只有在作出浏览动作, 如：用户点击浏览器的回退按钮，或者执行history.back()或history.forward()方法 时才会触发（pushState和replaceState不会触发popstate）
   window.addEventListener('popstate', urlReroute);
 
-  // history路由-----切换 pushState && replaceState => pushState和replaceState不会触发popstate事件（popstate只有在作出浏览动作, 如：用户点击，或者执行history.back()或history.forward()方法 时才会触发）
+  // history路由-----切换 pushState && replaceState => pushState和replaceState不会触发popstate事件（popstate只有在作出浏览动作, 如：用户点击浏览器的回退按钮，或者执行history.back()或history.forward()方法 时才会触发）
   window.history.pushState = patchedUpdateState(window.history.pushState, 'pushState');
   window.history.replaceState = patchedUpdateState(window.history.replaceState, 'replaceState');
 }
