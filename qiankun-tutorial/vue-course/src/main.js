@@ -6,11 +6,21 @@ Vue.config.productionTip = false
 
 
 let vm
-function render() {
+function render(props = {}) {
+
+  console.log('===props===', props);
+
+  // props是主应用传递给子应用的参数，也包括为 子应用 创建的节点信息：
+  // { container: document-fragment, courseName: "math", name: "course", }
+  const { container } = props;
+
   vm = new Vue({
     router,
     render: h => h(App)
-  }).$mount('#app')
+  }).$mount(container ? container.querySelector('#app') : '#app')
+  // 此处，mount的挂载节点要注意：当主应用开启strictStyleIsolation时，会讲子应用包裹到shadowDom中
+  // 此时，渲染模式由 render 模式 改为 container，子应用挂载节点为container.querySelector('#app')
+  // container为document-fragment
 }
 
 if (!window.__POWERED_BY_QIANKUN__) {
@@ -37,7 +47,7 @@ export async function bootstrap() {
 // 应用每次进入都会调用 mount 方法，通常我们在这里触发应用的渲染方法
 export async function mount(props) {
   console.log('course app mount');
-  render()
+  render(props)
 }
 
 // 应用每次 切出/卸载 会调用的方法，通常在这里我们会卸载微应用的应用实例

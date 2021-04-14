@@ -12,10 +12,13 @@ function render(props) {
   //     Vue.component(componentName, props.components[componentName])
   //   })
   // }
+
+  const { container } = props;
+
   vm = new Vue({
     router,
     render: h => h(App)
-  }).$mount('#app')
+  }).$mount(container ? container.querySelector('#app') : '#app')
 }
 
 if (!window.__POWERED_BY_QIANKUN__) {

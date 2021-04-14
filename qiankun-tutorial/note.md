@@ -94,3 +94,8 @@ module.exports = {
   },
 };
 ```
+
+start()启动时，设置strictStyleIsolation为true：
+```
+![alt xxx]
+```

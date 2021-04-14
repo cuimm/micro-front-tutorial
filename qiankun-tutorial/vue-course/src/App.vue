@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <div id="app__nav">
       <router-link to="/">Course-Home</router-link> |
       <router-link to="/about">Course-About</router-link>
     </div>
@@ -17,16 +17,16 @@
   color: #2c3e50;
 }
 
-#nav {
+#app__nav {
   padding: 30px;
 }
 
-#nav a {
+#app__nav a {
   font-weight: bold;
   color: #2c3e50;
 }
 
-#nav a.router-link-exact-active {
+#app__nav a.router-link-exact-active {
   color: #42b983;
 }
 </style>
